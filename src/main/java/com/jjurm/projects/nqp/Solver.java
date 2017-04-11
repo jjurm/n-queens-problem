@@ -4,6 +4,10 @@ package com.jjurm.projects.nqp;
  * A class containing the algorithm for solving the N Queens problem. Other classes like Chessboard
  * could be created and used but are omitted for simplicity as they would only cause unnecessary
  * drawback.
+ * <p>
+ * The algorithms is simple recursive backtracking, keeping track of the number of queens in each
+ * column and each diagonal line.
+ * </p>
  * 
  * @author JJurM
  */
@@ -13,12 +17,6 @@ public class Solver {
    * The size of the chessboard, i.e. the number of rows and columns.
    */
   private int N;
-
-  /**
-   * The chessboard represented as an array ({@code [row][column]}) of boolean values, where
-   * {@code true} indicates a queen placed on the particular position.
-   */
-  private boolean[][] chessboard;
 
   /**
    * An array where {@code columnInRow[i]} stores the column index of a queen in the {@code i}-th
@@ -52,7 +50,6 @@ public class Solver {
    */
   public Solver(int N) {
     this.N = N;
-    this.chessboard = new boolean[N][N];
     this.columnInRow = new int[N];
     this.countInColumn = new int[N];
     this.countInPositiveDiagonal = new int[2 * N - 1];
@@ -112,7 +109,7 @@ public class Solver {
    * 
    * @param row row index
    * @param column column index
-   * @return
+   * @return {@code true} if the placement is possible, {@code false} otherwise
    */
   private boolean canBePlaced(int row, int column) {
     return countInColumn[column] == 0
@@ -127,7 +124,6 @@ public class Solver {
    * @param column column index
    */
   private void placeOn(int row, int column) {
-    chessboard[row][column] = true;
     columnInRow[row] = column;
     countInColumn[column]++;
     countInPositiveDiagonal[getPositiveDiagonalIndex(row, column)]++;
@@ -141,7 +137,6 @@ public class Solver {
    * @param column column index
    */
   private void removeFrom(int row, int column) {
-    chessboard[row][column] = false;
     countInColumn[column]--;
     countInPositiveDiagonal[getPositiveDiagonalIndex(row, column)]--;
     countInNegativeDiagonal[getNegativeDiagonalIndex(row, column)]--;
